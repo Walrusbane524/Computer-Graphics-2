@@ -24,7 +24,6 @@ ShaderClass::ShaderClass(const char* vertexFile, const char* fragmentFile)
     // Read vertexFile and fragmentFile and store the strings
     string vertexCode = get_file_contents(vertexFile);
     string fragmentCode = get_file_contents(fragmentFile);
-
     // Convert the shader source strings into character arrays
     const char* vertexSource = vertexCode.c_str();
     const char* fragmentSource = fragmentCode.c_str();
