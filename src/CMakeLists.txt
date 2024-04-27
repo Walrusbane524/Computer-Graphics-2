@@ -12,13 +12,23 @@ function(add_executable_from_source EXECUTABLE_NAME SOURCE)
     target_include_directories(${EXECUTABLE_NAME} PUBLIC ../include/headers)
 
     # Compila o glad.c como uma biblioteca estática
-    add_library(glad STATIC glad.c)
+    add_library(glad STATIC ./lib/glad.c)
+
+    # Compila o stb.cpp como uma biblioteca estática
+    add_library(stb STATIC ./lib/stb.cpp)
 
     # Encontra e adiciona as bibliotecas GLFW
     find_package(glfw3 3.3 REQUIRED)
 
+    find_package(OpenGL REQUIRED)
+
+    # Adiciona o diretório include para procurar os headers de glad, glfw e stb
+    target_include_directories(${EXECUTABLE_NAME} PUBLIC
+            ../libraries/include
+    )
+
     # Vincula as bibliotecas necessárias
-    target_link_libraries(${EXECUTABLE_NAME} PRIVATE glad glfw ${OPENGL_LIBRARY} ${GLFW_LIBRARIES} ${CMAKE_DL_LIBS})
+    target_link_libraries(${EXECUTABLE_NAME} PRIVATE glad glfw stb ${OPENGL_LIBRARY} ${GLFW_LIBRARIES} ${CMAKE_DL_LIBS})
 endfunction()
 
 # Verifica se foi fornecido o nome do executável

@@ -25,6 +25,10 @@ public:
 
     void Activate();
     void Delete();
+
+private:
+    // basicamente capturando possíveis erros no shaders
+    void compileErrors(unsigned int shader, const char* type);
 };
 
 

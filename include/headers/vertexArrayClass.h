@@ -14,7 +14,7 @@ public:
 
     VertexArrayClass();
 
-    void LinkVBO(VertexBufferClass& VBO, GLuint l);
+    void LinkVBO(VertexBufferClass& VBO, GLuint layout, GLuint n_comp, GLenum type,  GLsizeiptr stride, void* offset);
 
     void Bind();
 

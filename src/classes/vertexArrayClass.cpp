@@ -7,10 +7,11 @@ VertexArrayClass::VertexArrayClass(){
     glGenVertexArrays(1, &id);
 }
 
-void VertexArrayClass::LinkVBO(VertexBufferClass& VBO, GLuint l){
+void VertexArrayClass::LinkVBO(VertexBufferClass& VBO, GLuint layout, GLuint n_comp, GLenum type,  GLsizeiptr stride, void* offset){
     VBO.Bind();
-    glVertexAttribPointer(l, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-    glEnableVertexAttribArray(l);
+    //VertexAttrbPointer interpreta os vertices de acordo com o shaders e com os dados enviados na função
+    glVertexAttribPointer(layout, n_comp, type, GL_FALSE, stride, offset);
+    glEnableVertexAttribArray(layout);
     VBO.Unbind();
 }
 
