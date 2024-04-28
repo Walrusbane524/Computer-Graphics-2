@@ -24,6 +24,7 @@ public:
     vec3 Position;
     vec3 Orientation = vec3(0.0f, 0.0f, -1.0f); // olhando sempre pro z negativo
     vec3 Up = vec3(0.0f, 1.0f, 0.0f);
+    mat4 cameraMatrix = mat4(1.0f);
 
     int width, height;
 
@@ -34,7 +35,8 @@ public:
 
     CameraClass(int width, int height, vec3 position);
 
-    void Matrix(float FOVdegree, float nearPlane, float farPlane, ShaderClass& shader, const char* uniform);
+    void updateMatrix(float FOVdegree, float nearPlane, float farPlane);
+    void Matrix(ShaderClass& shader, const char* uniform);
     void Inputs(GLFWwindow* window);
 
 };

@@ -9,7 +9,7 @@ CameraClass::CameraClass(int width, int height, vec3 position){
     CameraClass::height = height;
     Position = position;
 }
-void CameraClass::Matrix(float FOVdegree, float nearPlane, float farPlane, ShaderClass& shader, const char* uniform){
+void CameraClass::updateMatrix(float FOVdegree, float nearPlane, float farPlane){
     mat4 view = mat4(1.0f);
     mat4 proj = mat4(1.0f);
 
@@ -17,8 +17,12 @@ void CameraClass::Matrix(float FOVdegree, float nearPlane, float farPlane, Shade
 
     proj = perspective(radians(FOVdegree), (float)(width/height), nearPlane, farPlane);
 
+    cameraMatrix = proj* view;
+}
+
+void CameraClass::Matrix(ShaderClass& shader, const char* uniform){
     glUniformMatrix4fv(glGetUniformLocation(shader.id, uniform), 1, GL_FALSE,
-                       value_ptr(proj * view));
+                       value_ptr(cameraMatrix));
 
 }
 
@@ -27,7 +31,6 @@ void CameraClass::Inputs(GLFWwindow* window)
     // Handles key inputs
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        cout << speed << endl;
         Position += speed * Orientation;
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)

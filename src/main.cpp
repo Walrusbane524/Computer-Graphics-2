@@ -26,24 +26,67 @@ using namespace glm;
 // Vertices coordinates
 //Pyramid
 GLfloat vertices[] =
-        { //     COORDINATES     /        COLORS      /   TexCoord  //
-                -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
-                -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
-                0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
-                0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
-                0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	2.5f, 5.0f
-        };
+        { //     COORDINATES     /        COLORS          /    TexCoord   /        NORMALS       //
+                -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+                -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+                0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+                0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
 
+                -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+                -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+                0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+
+                -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+                0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+                0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+
+                0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
+                0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
+                0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.8f, 0.5f,  0.0f, // Right side
+
+                0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
+                -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
+                0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f,  0.8f  // Facing side
+        };
 // Indices for vertices order
 GLuint indices[] =
         {
+                0, 1, 2, // Bottom side
+                0, 2, 3, // Bottom side
+                4, 6, 5, // Left side
+                7, 9, 8, // Non-facing side
+                10, 12, 11, // Right side
+                13, 15, 14 // Facing side
+        };
+
+GLfloat lightVertices[] =
+        { //     COORDINATES     //
+                -0.1f, -0.1f,  0.1f,
+                -0.1f, -0.1f, -0.1f,
+                0.1f, -0.1f, -0.1f,
+                0.1f, -0.1f,  0.1f,
+                -0.1f,  0.1f,  0.1f,
+                -0.1f,  0.1f, -0.1f,
+                0.1f,  0.1f, -0.1f,
+                0.1f,  0.1f,  0.1f
+        };
+
+GLuint lightIndices[] =
+        {
                 0, 1, 2,
                 0, 2, 3,
-                0, 1, 4,
-                1, 2, 4,
-                2, 3, 4,
-                3, 0, 4
+                0, 4, 7,
+                0, 7, 3,
+                3, 7, 6,
+                3, 6, 2,
+                2, 6, 5,
+                2, 5, 1,
+                1, 5, 4,
+                1, 4, 0,
+                4, 5, 6,
+                4, 6, 7
         };
+
 
 int height = 800;
 int width = 800;
@@ -81,13 +124,47 @@ int main()
     VertexBufferClass VBO(vertices, sizeof(vertices));
     ElementBufferClass EBO(indices, sizeof(indices));
 
-    VAO.LinkVBO(VBO, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
-    VAO.LinkVBO(VBO, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    VAO.LinkVBO(VBO, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float))); //texture
+    VAO.LinkVBO(VBO, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*)0);
+    VAO.LinkVBO(VBO, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
+    VAO.LinkVBO(VBO, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float))); //texture
+    VAO.LinkVBO(VBO, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float))); //texture
 
     VAO.Unbind();
     VBO.Unbind();
     EBO.Unbind();
+
+    ShaderClass lightShader("../resource_files/shaders/light.vert", "../resource_files/shaders/light.frag");
+
+    VertexArrayClass VAOL;
+    VAOL.Bind();
+
+    VertexBufferClass VBOL(lightVertices, sizeof(lightVertices));
+    ElementBufferClass EBOL(lightIndices, sizeof(lightIndices));
+
+    VAOL.LinkVBO(VBOL, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+
+    VAOL.Unbind();
+    VBOL.Unbind();
+    EBOL.Unbind();
+
+    vec4 lightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    vec3 lightPosition = vec3(1.0f, 1.0f, 1.0f);
+    mat4 lightModel = mat4(1.0f);
+    lightModel = translate(lightModel, lightPosition);
+
+    vec3 pyramidPosition = vec3(0.0f, 0.0f, 0.0f);
+    mat4 pyramidModel = mat4(1.0f);
+    pyramidModel = translate(pyramidModel, pyramidPosition);
+
+    lightShader.Activate();
+    glUniformMatrix4fv(glGetUniformLocation(lightShader.id, "model"), 1, GL_FALSE, value_ptr(lightModel));
+    glUniform4f(glGetUniformLocation(lightShader.id, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+
+    shader.Activate();
+    glUniformMatrix4fv(glGetUniformLocation(shader.id, "model"), 1, GL_FALSE, value_ptr(pyramidModel));
+    glUniform4f(glGetUniformLocation(shader.id, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+    glUniform3f(glGetUniformLocation(shader.id, "lightPos"), lightPosition.x, lightPosition.y, lightPosition.z);
+
 
     //outra forma de fazer input no shaders, é com uniforms
 
@@ -110,13 +187,21 @@ int main()
         shader.Activate();
 
         camera.Inputs(window);
-        camera.Matrix(45.0f, 0.1f, 100.0f, shader, "camMatrix");
+        camera.updateMatrix(45.0f, 0.1f, 100.0f);
+
+        camera.Matrix(shader, "camMatrix");
 
         TEX.Bind();
         // Bind the VAO so OpenGL knows to use it
         VAO.Bind();
         // Draw the triangle using the GL_TRIANGLES primitive
         glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
+
+        lightShader.Activate();
+        camera.Matrix(lightShader, "camMatrix");
+        VAOL.Bind();
+        glDrawElements(GL_TRIANGLES, sizeof(lightIndices)/sizeof(int), GL_UNSIGNED_INT, 0);
+
         // Swap the back buffer with the front buffer
         glfwSwapBuffers(window);
         // Take care of all GLFW events
