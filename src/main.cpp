@@ -80,8 +80,8 @@ int main()
     glViewport(0, 0, width, height);
 
     TextureClass textures[]{
-        TextureClass(("../resource_files/textures/planks.png"), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        TextureClass(("../resource_files/textures/planksSpec.png"), "specular", 1, GL_RED, GL_UNSIGNED_BYTE)
+            TextureClass(("../resource_files/textures/planks.png"), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+            TextureClass(("../resource_files/textures/planksSpec.png"), "specular", 1, GL_RED, GL_UNSIGNED_BYTE)
     };
 
     ShaderClass shader("../resource_files/shaders/default.vert", "../resource_files/shaders/default.frag");
@@ -102,16 +102,16 @@ int main()
     unsigned int type = light.type;
     lightModel = translate(lightModel, lightPosition);
 
-    vec3 pyramidPosition = vec3(0.0f, 0.0f, 0.0f);
-    mat4 pyramidModel = mat4(1.0f);
-    pyramidModel = translate(pyramidModel, pyramidPosition);
+    vec3 floorPosition = vec3(0.0f, 0.0f, 0.0f);
+    mat4 floorModel = mat4(1.0f);
+    floorModel = translate(floorModel, floorPosition);
 
     lightShader.Activate();
     glUniformMatrix4fv(glGetUniformLocation(lightShader.id, "model"), 1, GL_FALSE, value_ptr(lightModel));
     glUniform4f(glGetUniformLocation(lightShader.id, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
 
     shader.Activate();
-    glUniformMatrix4fv(glGetUniformLocation(shader.id, "model"), 1, GL_FALSE, value_ptr(pyramidModel));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id, "model"), 1, GL_FALSE, value_ptr(floorModel));
     glUniform4f(glGetUniformLocation(shader.id, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(shader.id, "lightPos"), lightPosition.x, lightPosition.y, lightPosition.z);
     glUniform1ui(glGetUniformLocation(shader.id, "type"), type);
@@ -137,7 +137,6 @@ int main()
 
         floor.Draw(shader, camera);
         light.Draw(lightShader,camera);
-
         // Swap the back buffer with the front buffer
         glfwSwapBuffers(window);
         // Take care of all GLFW events
