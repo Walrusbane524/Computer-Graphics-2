@@ -5,7 +5,6 @@
 #ifndef CG2_ELEMENTBUFFERCLASS_H
 #define CG2_ELEMENTBUFFERCLASS_H
 
-
 #include <glad/glad.h>
 
 class ElementBufferClass{

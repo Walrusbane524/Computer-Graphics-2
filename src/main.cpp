@@ -18,6 +18,7 @@
 #include "../include/headers/vertexArrayClass.h"
 #include "../include/headers/vertexBufferClass.h"
 #include "../include/headers/textureClass.h"
+#include "../include/headers/cameraClass.h"
 
 using namespace std;
 using namespace glm;
@@ -49,7 +50,6 @@ int width = 800;
 
 int main()
 {
-
     glfwInit();
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -85,23 +85,19 @@ int main()
     VAO.LinkVBO(VBO, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     VAO.LinkVBO(VBO, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float))); //texture
 
-
     VAO.Unbind();
     VBO.Unbind();
     EBO.Unbind();
 
     //outra forma de fazer input no shaders, é com uniforms
-    GLuint uniId = glGetUniformLocation(shader.id, "scale");
 
     //Texture
     TextureClass TEX("../resource_files/textures/pop-cat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-
     TEX.texUnit(shader, "tex0", 0);
 
-    float rotation = 0.0f;
-    double prevTime = glfwGetTime();
-
     glEnable(GL_DEPTH_TEST);
+
+    CameraClass camera(width, height, vec3(0.0f, 0.0f, 2.0f));
 
     // Main while loop
     while (!glfwWindowShouldClose(window))
@@ -113,34 +109,9 @@ int main()
         // Tell OpenGL which Shader Program we want to use
         shader.Activate();
 
-        double crntTime = glfwGetTime();
-        if (crntTime - prevTime >= 1 / 60)
-        {
-            rotation += 0.005f;
-            prevTime = crntTime;
-        }
+        camera.Inputs(window);
+        camera.Matrix(45.0f, 0.1f, 100.0f, shader, "camMatrix");
 
-        mat4 model = mat4(1.0f);
-        mat4 view = mat4(1.0f);
-        mat4 proj  = mat4(1.0f);
-
-        model = rotate(model, radians(rotation), vec3(0.0f, 1.0f, 0.0f));
-        view = translate(view, vec3(0.0f, -0.5f, -2.0f));
-        proj = perspective(radians(45.0f), (float)(width/height), 0.1f, 100.0f);
-        // toda a visão que temso vai de 0.1 até 1000
-
-
-        int modelUni = glGetUniformLocation(shader.id, "model");
-        glUniformMatrix4fv(modelUni, 1, GL_FALSE, value_ptr(model));
-
-        int viewUni = glGetUniformLocation(shader.id, "view");
-        glUniformMatrix4fv(viewUni, 1, GL_FALSE, value_ptr(view));
-
-        int projUni = glGetUniformLocation(shader.id, "proj");
-        glUniformMatrix4fv(projUni, 1, GL_FALSE, value_ptr(proj));
-
-
-        glUniform1f(uniId, 0.5f);
         TEX.Bind();
         // Bind the VAO so OpenGL knows to use it
         VAO.Bind();
