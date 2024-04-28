@@ -6,12 +6,15 @@
 #define CG2_VERTEXBUFFERCLASS_H
 
 #include <glad/glad.h>
+#include <vector>
+
+#include "vertexClass.h"
 
 class VertexBufferClass{
 public:
     GLuint id;
 
-    VertexBufferClass(GLfloat* vertices, GLsizeiptr size);
+    VertexBufferClass(std::vector<VertexClass>& vertices);
 
     void Bind();
     void Unbind();

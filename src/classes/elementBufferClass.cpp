@@ -4,10 +4,10 @@
 
 #include "../../include/headers/elementBufferClass.h"
 
-ElementBufferClass::ElementBufferClass(GLuint* indices, GLsizeiptr size){
+ElementBufferClass::ElementBufferClass(std::vector<GLuint>& indices){
     glGenBuffers(1, &id);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 }
 
 void ElementBufferClass::Bind(){

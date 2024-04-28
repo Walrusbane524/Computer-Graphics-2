@@ -6,12 +6,13 @@
 #define CG2_ELEMENTBUFFERCLASS_H
 
 #include <glad/glad.h>
+#include <vector>
 
 class ElementBufferClass{
 public:
     GLuint id;
 
-    ElementBufferClass(GLuint* indices, GLsizeiptr size);
+    ElementBufferClass(std::vector<GLuint>& indices);
 
     void Bind();
     void Unbind();

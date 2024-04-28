@@ -1,74 +1,42 @@
 //
 // Created by Murilo on 26/04/2024.
 //
-#include <iostream>
-// o CLION não tá achando pq eu configurei no CMAKE para achar
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <stb/stb_image.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <fstream>
-#include <sstream>
-#include <math.h>
 
-#include "../include/headers/shaderClass.h"
-#include "../include/headers/elementBufferClass.h"
-#include "../include/headers/vertexArrayClass.h"
-#include "../include/headers/vertexBufferClass.h"
-#include "../include/headers/textureClass.h"
-#include "../include/headers/cameraClass.h"
+#include "../include/headers/meshClass.h"
+#include "../include/headers/lightClass.h"
 
-using namespace std;
-using namespace glm;
+const unsigned int width = 800;
+const unsigned int height = 800;
+
+using std::vector;
+
 
 // Vertices coordinates
-//Pyramid
-GLfloat vertices[] =
-        { //     COORDINATES     /        COLORS          /    TexCoord   /        NORMALS       //
-                -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-                -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-                0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-                0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
-
-                -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-                -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-                0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-
-                -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-                0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-                0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
-
-                0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
-                0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
-                0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.8f, 0.5f,  0.0f, // Right side
-
-                0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
-                -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
-                0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f,  0.8f  // Facing side
+VertexClass vertices[] =
+        { //               COORDINATES           /            COLORS          /           NORMALS         /       TEXTURE COORDINATES    //
+                VertexClass{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
+                VertexClass{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+                VertexClass{glm::vec3( 1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+                VertexClass{glm::vec3( 1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
         };
+
 // Indices for vertices order
 GLuint indices[] =
         {
-                0, 1, 2, // Bottom side
-                0, 2, 3, // Bottom side
-                4, 6, 5, // Left side
-                7, 9, 8, // Non-facing side
-                10, 12, 11, // Right side
-                13, 15, 14 // Facing side
+                0, 1, 2,
+                0, 2, 3
         };
 
-GLfloat lightVertices[] =
+VertexClass lightVertices[] =
         { //     COORDINATES     //
-                -0.1f, -0.1f,  0.1f,
-                -0.1f, -0.1f, -0.1f,
-                0.1f, -0.1f, -0.1f,
-                0.1f, -0.1f,  0.1f,
-                -0.1f,  0.1f,  0.1f,
-                -0.1f,  0.1f, -0.1f,
-                0.1f,  0.1f, -0.1f,
-                0.1f,  0.1f,  0.1f
+                VertexClass{glm::vec3(-0.1f, -0.1f,  0.1f)},
+                VertexClass{glm::vec3(-0.1f, -0.1f, -0.1f)},
+                VertexClass{glm::vec3(0.1f, -0.1f, -0.1f)},
+                VertexClass{glm::vec3(0.1f, -0.1f,  0.1f)},
+                VertexClass{glm::vec3(-0.1f,  0.1f,  0.1f)},
+                VertexClass{glm::vec3(-0.1f,  0.1f, -0.1f)},
+                VertexClass{glm::vec3(0.1f,  0.1f, -0.1f)},
+                VertexClass{glm::vec3(0.1f,  0.1f,  0.1f)}
         };
 
 GLuint lightIndices[] =
@@ -86,11 +54,6 @@ GLuint lightIndices[] =
                 4, 5, 6,
                 4, 6, 7
         };
-
-
-int height = 800;
-int width = 800;
-
 int main()
 {
     glfwInit();
@@ -116,40 +79,27 @@ int main()
     // In this case the viewport goes from x = 0, y = 0, to x = 800, y = 800
     glViewport(0, 0, width, height);
 
+    TextureClass textures[]{
+        TextureClass(("../resource_files/textures/planks.png"), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        TextureClass(("../resource_files/textures/planksSpec.png"), "specular", 1, GL_RED, GL_UNSIGNED_BYTE)
+    };
+
     ShaderClass shader("../resource_files/shaders/default.vert", "../resource_files/shaders/default.frag");
 
-    VertexArrayClass VAO;
-    VAO.Bind();
-
-    VertexBufferClass VBO(vertices, sizeof(vertices));
-    ElementBufferClass EBO(indices, sizeof(indices));
-
-    VAO.LinkVBO(VBO, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*)0);
-    VAO.LinkVBO(VBO, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
-    VAO.LinkVBO(VBO, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float))); //texture
-    VAO.LinkVBO(VBO, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float))); //texture
-
-    VAO.Unbind();
-    VBO.Unbind();
-    EBO.Unbind();
+    std::vector <VertexClass> verts(vertices, vertices + sizeof(vertices) / sizeof(VertexClass));
+    std::vector <GLuint> ind(indices, indices + sizeof(indices) / sizeof(GLuint));
+    std::vector <TextureClass> tex(textures, textures + sizeof(textures) / sizeof(TextureClass));
+    MeshClass floor(verts, ind, tex); // Mesh plana criada
 
     ShaderClass lightShader("../resource_files/shaders/light.vert", "../resource_files/shaders/light.frag");
-
-    VertexArrayClass VAOL;
-    VAOL.Bind();
-
-    VertexBufferClass VBOL(lightVertices, sizeof(lightVertices));
-    ElementBufferClass EBOL(lightIndices, sizeof(lightIndices));
-
-    VAOL.LinkVBO(VBOL, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
-
-    VAOL.Unbind();
-    VBOL.Unbind();
-    EBOL.Unbind();
+    std::vector <VertexClass> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(VertexClass));
+    std::vector <GLuint> lightInd(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));
+    LightClass light(lightVerts, lightInd, 0); // Criando a "mesh" luz, mandadno tex como placeholder
 
     vec4 lightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    vec3 lightPosition = vec3(1.0f, 1.0f, 1.0f);
+    vec3 lightPosition = vec3(0.5f, 0.5f, 0.5f);
     mat4 lightModel = mat4(1.0f);
+    unsigned int type = light.type;
     lightModel = translate(lightModel, lightPosition);
 
     vec3 pyramidPosition = vec3(0.0f, 0.0f, 0.0f);
@@ -164,13 +114,10 @@ int main()
     glUniformMatrix4fv(glGetUniformLocation(shader.id, "model"), 1, GL_FALSE, value_ptr(pyramidModel));
     glUniform4f(glGetUniformLocation(shader.id, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(shader.id, "lightPos"), lightPosition.x, lightPosition.y, lightPosition.z);
+    glUniform1ui(glGetUniformLocation(shader.id, "type"), type);
 
 
     //outra forma de fazer input no shaders, é com uniforms
-
-    //Texture
-    TextureClass TEX("../resource_files/textures/pop-cat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-    TEX.texUnit(shader, "tex0", 0);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -188,21 +135,8 @@ int main()
         camera.Inputs(window);
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
-        shader.Activate();
-        glUniform3f(glGetUniformLocation(shader.id, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
-
-        camera.Matrix(shader, "camMatrix");
-
-        TEX.Bind();
-        // Bind the VAO so OpenGL knows to use it
-        VAO.Bind();
-        // Draw the triangle using the GL_TRIANGLES primitive
-        glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
-
-        lightShader.Activate();
-        camera.Matrix(lightShader, "camMatrix");
-        VAOL.Bind();
-        glDrawElements(GL_TRIANGLES, sizeof(lightIndices)/sizeof(int), GL_UNSIGNED_INT, 0);
+        floor.Draw(shader, camera);
+        light.Draw(lightShader,camera);
 
         // Swap the back buffer with the front buffer
         glfwSwapBuffers(window);
@@ -210,11 +144,8 @@ int main()
         glfwPollEvents();
     }
     // Delete all the objects we've created
-    VAO.Delete();
-    VBO.Delete();
-    EBO.Delete();
-    TEX.Delete();
     shader.Delete();
+    lightShader.Delete();
     // Delete window before ending the program
     glfwDestroyWindow(window);
     // Terminate GLFW before ending the program
