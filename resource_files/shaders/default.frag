@@ -16,15 +16,24 @@ in vec3 crntPos;
 uniform sampler2D tex0;
 
 uniform vec4 lightColor;
-uniform vec3 lightPos;
 
+uniform vec3 lightPos;
+uniform vec3 camPos;
 
 void main()
 {
+    float ambient = 0.2f;
+
     vec3 normal = normalize(Normal);
     vec3 lightDirection = normalize(lightPos - crntPos);
 
     float diffuse = max(dot(normal, lightDirection), 0.0f);
+    float specLight = 0.50f;
+    vec3 viewDir = normalize(camPos - crntPos);
 
-	FragColor = texture(tex0, texCoord) * lightColor * diffuse;
+    vec3 reflecDir = reflect(-lightDirection, normal);
+    float specAmount = pow(max(dot(viewDir, reflecDir), 0.0f), 8);
+    float specular = specAmount * specLight;
+
+	FragColor = texture(tex0, texCoord) * lightColor * (diffuse + ambient);
 }

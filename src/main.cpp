@@ -184,10 +184,12 @@ int main()
         // Clean the back buffer and assign the new color to it
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // Tell OpenGL which Shader Program we want to use
-        shader.Activate();
 
         camera.Inputs(window);
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
+
+        shader.Activate();
+        glUniform3f(glGetUniformLocation(shader.id, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
 
         camera.Matrix(shader, "camMatrix");
 
