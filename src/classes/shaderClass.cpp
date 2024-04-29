@@ -3,21 +3,22 @@
 //
 #include "../../include/headers/shaderClass.h"
 
-string get_file_contents(const char* filename)
+std::string get_file_contents(const char* filename)
 {
-    ifstream in(filename, ios::binary);
+    std::ifstream in(filename, std::ios::binary);
     if (in)
     {
-        string contents;
-        in.seekg(0, ios::end);
+        std::string contents;
+        in.seekg(0, std::ios::end);
         contents.resize(in.tellg());
-        in.seekg(0, ios::beg);
+        in.seekg(0, std::ios::beg);
         in.read(&contents[0], contents.size());
         in.close();
         return(contents);
     }
     throw(errno);
 }
+
 
 ShaderClass::ShaderClass(const char* vertexFile, const char* fragmentFile)
 {
@@ -49,6 +50,8 @@ ShaderClass::ShaderClass(const char* vertexFile, const char* fragmentFile)
     glAttachShader(id, fragmentShader);
     // Wrap-up/Link all the shaders together into the Shader Program
     glLinkProgram(id);
+
+    cout << "FIM" << endl;
 
     // Delete the now useless Vertex and Fragment Shader objects
     glDeleteShader(vertexShader);

@@ -16,7 +16,7 @@ public:
     const char* type;
     GLuint unit;
 
-    TextureClass(const char* image, const char* texType, GLuint slot, GLenum format, GLenum pixelType);
+    TextureClass(const char* image, const char* texType, GLuint slot);
 
     // Assigns a texture unit to a texture
     void texUnit(ShaderClass& shader, const char* uniform, GLuint unit);
