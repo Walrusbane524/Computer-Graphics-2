@@ -95,15 +95,15 @@ int main()
     ShaderClass lightShader("../resource_files/shaders/light.vert", "../resource_files/shaders/light.frag");
     std::vector <VertexClass> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(VertexClass));
     std::vector <GLuint> lightInd(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));
-    LightClass light(lightVerts, lightInd, 1); // Criando a "mesh" luz, mandadno tex como placeholder
+    LightClass light(lightVerts, lightInd, 0); // Criando a "mesh" luz, mandadno tex como placeholder
 
     vec4 lightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    vec3 lightPosition = vec3(0.5f, 0.5f, 0.5f);
+    vec3 lightPosition = vec3(0.0f, 0.5f, 0.0f);
     mat4 lightModel = mat4(1.0f);
     unsigned int type = light.type;
     lightModel = translate(lightModel, lightPosition);
 
-    vec3 floorPosition = vec3(0.0f, 0.0f, 0.0f);
+    vec3 floorPosition = vec3(0.0f, -0.05f, 0.0f);
     mat4 floorModel = mat4(1.0f);
     floorModel = translate(floorModel, floorPosition);
 
@@ -117,7 +117,7 @@ int main()
     glUniform3f(glGetUniformLocation(shader.id, "lightPos"), lightPosition.x, lightPosition.y, lightPosition.z);
     glUniform1ui(glGetUniformLocation(shader.id, "type"), type);
 
-    ModelClass model("../resource_files/old/scene.gltf");
+    ModelClass model("../resource_files/models/scene.gltf");
 
     //outra forma de fazer input no shaders, é com uniforms
 
@@ -138,7 +138,7 @@ int main()
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
         model.Draw(shader, camera);
-        floor.Draw(shader, camera);
+        floor.Draw(shader ,camera, floorModel);
         // Swap the back buffer with the front buffer
         glfwSwapBuffers(window);
         // Take care of all GLFW events

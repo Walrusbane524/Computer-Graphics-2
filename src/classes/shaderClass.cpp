@@ -51,8 +51,6 @@ ShaderClass::ShaderClass(const char* vertexFile, const char* fragmentFile)
     // Wrap-up/Link all the shaders together into the Shader Program
     glLinkProgram(id);
 
-    cout << "FIM" << endl;
-
     // Delete the now useless Vertex and Fragment Shader objects
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);

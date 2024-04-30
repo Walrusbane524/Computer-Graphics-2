@@ -237,7 +237,6 @@ std::vector<TextureClass> ModelClass::getTextures()
 
     std::string fileStr = std::string(file);
     std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
-    cout << fileDirectory << endl;
 
     // Go over all images
     for (unsigned int i = 0; i < JSON["images"].size(); i++)
@@ -263,7 +262,6 @@ std::vector<TextureClass> ModelClass::getTextures()
             // Load diffuse texture
             if (texPath.find("baseColor") != std::string::npos)
             {
-                cout << "ACHEI A COR BASE" << endl;
                 TextureClass diffuse = TextureClass((fileDirectory + texPath).c_str(), "diffuse", loadedTex.size());
                 textures.push_back(diffuse);
                 loadedTex.push_back(diffuse);
@@ -272,7 +270,6 @@ std::vector<TextureClass> ModelClass::getTextures()
                 // Load specular texture
             else if (texPath.find("metallicRoughness") != std::string::npos)
             {
-                cout << "ACHEI A METALLIC ROUGHNESS" << endl;
                 TextureClass specular = TextureClass((fileDirectory + texPath).c_str(), "specular", loadedTex.size());
                 textures.push_back(specular);
                 loadedTex.push_back(specular);
